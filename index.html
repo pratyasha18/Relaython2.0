@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Relaython Timer Dashboard</title>
+
+<!----- Link to external CSS file ----->
+<link rel="stylesheet" href="style.css">
+<!------------------------------------->
+
+</head>
+
+<body>
+
+<h1>🏁 Relaython 2.0 Team Timer</h1>
+
+<div class="top-bar">
+    <button class="start-all" onclick="startAll()">▶ START ALL</button>
+
+    <div class="controls">
+        <input id="teamName" placeholder="Enter Team Name">
+        <button onclick="addTeam()">Add Team</button>
+    </div>
+
+    <div style="width:120px"></div>
+</div>
+
+<div class="teams" id="teams"></div>
+
+<audio id="warningSound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
+<audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"></audio>
+
+<!-- Link to external JavaScript file -->
+<script src="script.js"></script>
+<!------------------------------>
+
+</body>
+</html>
