@@ -58,12 +58,30 @@ function addTeam(savedData = null) {
 
   const card = document.createElement("div");
 
+  const modeClassMap = {
+    READY: "ready",
+    WORK: "working",
+    SWITCH: "switching",
+    DQ: "dq",
+  };
+
+  const modeStatusMap = {
+    READY: "READY",
+    WORK: "WORKING",
+    SWITCH: "SWITCHING",
+    DQ: "DISQUALIFIED",
+  };
+
+  function applyModeStyles() {
+    const className = modeClassMap[mode] || "ready";
+    card.className = `team-card ${className}`;
+    status.innerText = modeStatusMap[mode] || mode;
+  }
+
   function highlightCard() {
     card.classList.add("alert");
     setTimeout(() => card.classList.remove("alert"), 2000);
   }
-
-  card.className = `team-card ${mode.toLowerCase()}`;
 
   const del = document.createElement("div");
   del.className = "delete-btn";
@@ -132,10 +150,9 @@ function addTeam(savedData = null) {
 
       if (time <= 0) {
         clearInterval(interval);
-        card.className = "team-card dq";
-        status.innerText = "DISQUALIFIED";
-        timer.innerText = "DQ";
         mode = "DQ";
+        applyModeStyles();
+        timer.innerText = "DQ";
         teamObj.mode = mode;
         teamObj.time = 0;
         alarm.play();
@@ -155,8 +172,7 @@ function addTeam(savedData = null) {
     mode = "WORK";
     warned = false;
     time = WORK_TIME;
-    status.innerText = "WORKING";
-    card.className = "team-card working";
+    applyModeStyles();
     teamObj.mode = mode;
     teamObj.time = time;
     teamObj.warned = warned;
@@ -167,8 +183,7 @@ function addTeam(savedData = null) {
   function startSwitch() {
     mode = "SWITCH";
     time = SWITCH_TIME;
-    status.innerText = "SWITCHING";
-    card.className = "team-card switching";
+    applyModeStyles();
     teamObj.mode = mode;
     teamObj.time = time;
     saveToLocalStorage();
@@ -213,6 +228,9 @@ function addTeam(savedData = null) {
     start,
     end,
   );
+
+  applyModeStyles();
+  timer.innerText = formatTime(time);
 
   teamsDiv.appendChild(card);
   if (!savedData) {
