@@ -66,10 +66,10 @@ function addTeam(savedData = null) {
   };
 
   const modeStatusMap = {
-    READY: "READY",
-    WORK: "WORKING",
-    SWITCH: "SWITCHING",
-    DQ: "DISQUALIFIED",
+    READY: "READY MODE",
+    WORK: "WORKING MODE",
+    SWITCH: "SWITCHING MODE",
+    DQ: "DISQUALIFIED MODE",
   };
 
   function applyModeStyles() {
