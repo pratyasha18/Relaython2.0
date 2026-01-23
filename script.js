@@ -134,6 +134,30 @@ function addTeam(savedData = null) {
   end.innerText = "End";
   end.className = "btn";
 
+  const pause = document.createElement("button");
+  pause.innerText = "Pause";
+  pause.className = "btn";
+  pause.disabled = true;
+
+  let isPaused = false;
+
+  function togglePause() {
+    if (isPaused) {
+      // Resume
+      isPaused = false;
+      pause.innerText = "Pause";
+      run();
+    } else {
+      // Pause
+      isPaused = true;
+      pause.innerText = "Resume";
+      clearInterval(interval);
+      saveToLocalStorage();
+    }
+  }
+
+  pause.onclick = togglePause;
+
   function run() {
     clearInterval(interval);
     interval = setInterval(() => {
@@ -157,7 +181,7 @@ function addTeam(savedData = null) {
         teamObj.time = 0;
         alarm.play();
         highlightCard();
-        start.disabled = end.disabled = true;
+        start.disabled = end.disabled = pause.disabled = true;
         saveToLocalStorage();
       } else {
         teamObj.time = time;
@@ -172,6 +196,9 @@ function addTeam(savedData = null) {
     mode = "WORK";
     warned = false;
     time = WORK_TIME;
+    isPaused = false;
+    pause.innerText = "Pause";
+    pause.disabled = false;
     applyModeStyles();
     teamObj.mode = mode;
     teamObj.time = time;
@@ -183,6 +210,9 @@ function addTeam(savedData = null) {
   function startSwitch() {
     mode = "SWITCH";
     time = SWITCH_TIME;
+    isPaused = false;
+    pause.innerText = "Pause";
+    pause.disabled = false;
     applyModeStyles();
     teamObj.mode = mode;
     teamObj.time = time;
@@ -226,11 +256,18 @@ function addTeam(savedData = null) {
     curr,
     timer,
     start,
+    pause,
     end,
   );
 
   applyModeStyles();
   timer.innerText = formatTime(time);
+
+  // Resume timer if it was running before the refresh
+  if (savedData && (mode === "WORK" || mode === "SWITCH")) {
+    curr.disabled = true;
+    run();
+  }
 
   teamsDiv.appendChild(card);
   if (!savedData) {
